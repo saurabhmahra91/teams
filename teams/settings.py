@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'whatsapp.apps.WhatsappConfig',
     'polls.apps.PollsConfig',
     'django.contrib.admin',
@@ -39,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels',
 ]
 
 MIDDLEWARE = [
@@ -70,15 +70,16 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'teams.wsgi.application'
+# WSGI_APPLICATION = 'teams.wsgi.application'
 ASGI_APPLICATION = 'teams.asgi.application'
+
 CHANNEL_LAYERS = {
-    'deafult': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG' : {
-            'hosts': [('localhost', 6379)],
-        }
-    }
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
 }
 
 

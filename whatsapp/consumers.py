@@ -1,8 +1,22 @@
+from channels.generic.websocket import WebsocketConsumer
+from asgiref.sync import async_to_sync
 import json
-from asgiref.sync import sync_to_async
-from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from asgiref import sync_to_async
 
-class chatconsumer(AsyncJsonWebsocketConsumer):
-    async def connect(self):
-        
+class TestConsumer(WebsocketConsumer):
+    def connect(self):
+        self.room_name = "test_consumer_room"
+        self.room_group_name = "test_consumer_group"
+        async_to_sync(self.channel_layer.group_add)(
+            self.room_name, self.room_group_name
+        )
+        self.accept()
+        self.send(text_data=json.dumps({'status':'connected'}))
+
+    def receive(self, text_data):
+        print(text_data)
+
+    def disconnect(self, code):
+        print("it got disconnected :/")
+
+
+    
