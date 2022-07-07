@@ -1,0 +1,8 @@
+<form action="{% url 'polls:login' %}" method="POST">
+	{% csrf_token %}
+	<fieldset>
+		<input type="text" name="username" id="">
+		<input type="password" name="password" id="">
+	</fieldset>
+	<input type="submit" value="Button Text" />
+</form>

@@ -1,7 +1,9 @@
+from multiprocessing import context
 from django.http.response import Http404, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, request
-from .models import Question, Choice
+from .models import Question, Choice, User
+from django.contrib import auth
 from django.urls import reverse
 
 def index(request):
@@ -38,4 +40,34 @@ def detail(request, question_id):
         raise Http404("No such Question exists")
 
     return render(request, 'polls/detail.html',context)
+
+def authpage(request):
+    return render(request, 'polls/authpage.html')
+
+
+def signin(request):
+    user = auth.authenticate(request, username=request.POST['username'], password=request.POST['password'])
+    if user is None:
+        user = User.objects.create_user(username=request.POST['username'], password=request.POST['password'])
+    auth.login(request, user)
+    # return redirect(index)
+    context = {}
+    return render(request, 'polls/index.html', context)
+
+
+def login(request):
+    user = auth.authenticate(request, username=request.POST['username'], password=request.POST['password'])
+    if user is not None:
+        print("USER FOUND")
+        auth.login(request, user)
+    context = {}
+    return HttpResponseRedirect(reverse('polls:index'))
+    return redirect(index) #error logging in
+    return render(request, 'polls/index.html', context)
+
+
+
+
+
+
 
